@@ -7,6 +7,7 @@
     "mint": "tsx src/01-create-and-mint.ts",
     "transfer": "tsx src/02-transfer.ts",
     "check": "tsx src/03-check.ts",
+    "metadata": "tsx src/04-name-token.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
