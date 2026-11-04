@@ -1,0 +1,11 @@
+{
+  "mintAddress": "6RKH3azQw6gaAQv8aYpeXfM2PruirTgFzHfgtpqUSEhp",
+  "ownerTokenAccount": "DQ6AUohvLynUS1sN2r8hHe354G4LWr8Ec5w5HL9ArdEp",
+  "recipientAddress": "9fmB1f6R2fYRG3pf4r94DzgijcRZYEqNMhExnDy4Ei5L",
+  "recipientTokenAccount": "FkWNv3vi3ssMgf8sLVN5gC6RAvJfCjRW49kqkTcGhCcQ",
+  "amount": "100000000000",
+  "signatures": {
+    "recipientTokenAccountCreation": "3w9gG4UtWyuRYHS3oYDUCTrFdrdtKW97DKzkqPbFuaDb8VfxQSwCs19EU4CscErfx1iC5fKaW5K6bjkF6kH4eZ2K",
+    "transfer": "nYmaJzrBmSrdcJi7YTmPiZE1gFs9GtDqUCxzFWZRfYAccbZ4NgB8vGMnZp3R9ZmrmYAyaQx3sUxGuwSn1MfGv4u"
+  }
+}
