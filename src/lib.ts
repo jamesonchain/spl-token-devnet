@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { resolve } from "node:path";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
@@ -34,7 +34,7 @@ export function loadWallet(): Keypair {
     throw new Error("The wallet file must contain a 64 number keypair array.");
   }
 
-  return Keypair.fromSecretKey(Uint8Array.from(parsed as number[]));
+  return Keypair.fromSecretKey(Uint8Array.from(parsed));
 }
 
 function isRateLimitError(error: unknown): boolean {
@@ -76,10 +76,7 @@ export async function checkDevnetAndBalance(
   connection: Connection,
   wallet: Keypair,
 ): Promise<boolean> {
-  const genesisHash = await withRpcRetry(() => connection.getGenesisHash());
-  if (genesisHash !== DEVNET_GENESIS_HASH) {
-    throw new Error("The RPC endpoint is not Solana devnet.");
-  }
+  await checkDevnet(connection);
 
   const balance = await withRpcRetry(() =>
     connection.getBalance(wallet.publicKey),
@@ -92,6 +89,13 @@ export async function checkDevnetAndBalance(
 
   console.log(`Wallet balance: ${(balance / 1_000_000_000).toFixed(4)} SOL.`);
   return true;
+}
+
+export async function checkDevnet(connection: Connection): Promise<void> {
+  const genesisHash = await withRpcRetry(() => connection.getGenesisHash());
+  if (genesisHash !== DEVNET_GENESIS_HASH) {
+    throw new Error("The RPC endpoint is not Solana devnet.");
+  }
 }
 
 export function addressExplorerLink(address: PublicKey | string): string {
@@ -108,10 +112,30 @@ export function getRecipientPublicKey(): PublicKey {
     return new PublicKey(configuredRecipient);
   }
 
+  const recipientFile = resolve("results", "recipient.json");
+  if (existsSync(recipientFile)) {
+    const stored: unknown = JSON.parse(readFileSync(recipientFile, "utf8"));
+    if (
+      typeof stored === "object" &&
+      stored !== null &&
+      "address" in stored &&
+      typeof stored.address === "string"
+    ) {
+      return new PublicKey(stored.address);
+    }
+
+    throw new Error("The saved recipient result does not contain an address.");
+  }
+
   const temporaryRecipient = Keypair.generate();
+  mkdirSync("results", { recursive: true });
+  writeFileSync(
+    recipientFile,
+    `${JSON.stringify({ address: temporaryRecipient.publicKey.toBase58() }, null, 2)}\n`,
+  );
   console.log(
     `Temporary recipient address: ${addressExplorerLink(temporaryRecipient.publicKey)}`,
   );
-  console.log("This address is not saved and cannot be recovered after this run.");
+  console.log("The private key is not saved and this address cannot be controlled.");
   return temporaryRecipient.publicKey;
 }
