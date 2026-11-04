@@ -106,6 +106,16 @@ export function transactionExplorerLink(signature: string): string {
   return `https://explorer.solana.com/tx/${signature}?cluster=devnet`;
 }
 
+export function formatTokenAmount(amount: bigint, decimals: number): string {
+  const scale = 10n ** BigInt(decimals);
+  const whole = amount / scale;
+  const fraction = (amount % scale)
+    .toString()
+    .padStart(decimals, "0")
+    .replace(/0+$/, "");
+  return fraction.length > 0 ? `${whole}.${fraction}` : whole.toString();
+}
+
 export function getRecipientPublicKey(): PublicKey {
   const configuredRecipient = process.env.RECIPIENT;
   if (configuredRecipient) {

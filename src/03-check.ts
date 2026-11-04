@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from "node:fs";
 import {
   addressExplorerLink,
   checkDevnet,
+  formatTokenAmount,
   getConnection,
   loadWallet,
   withRpcRetry,
@@ -84,16 +85,22 @@ async function main(): Promise<void> {
     withRpcRetry(() => getAccount(connection, recipientTokenAccount)),
   ]);
   console.log(`Mint address: ${addressExplorerLink(mintAddress)}`);
-  console.log(`Supply in base units: ${mintInfo.supply.toString()}`);
+  console.log(
+    `Supply: ${formatTokenAmount(mintInfo.supply, mintInfo.decimals)} tokens (${mintInfo.supply.toString()} base units).`,
+  );
   console.log(`My token account: ${addressExplorerLink(ownerTokenAccount)}`);
-  console.log(`My balance in base units: ${ownerInfo.amount.toString()}`);
+  console.log(
+    `My balance: ${formatTokenAmount(ownerInfo.amount, mintInfo.decimals)} tokens (${ownerInfo.amount.toString()} base units).`,
+  );
   console.log(
     `Recipient: ${addressExplorerLink(transferResult.recipientAddress)}`,
   );
   console.log(
     `Recipient token account: ${addressExplorerLink(recipientTokenAccount)}`,
   );
-  console.log(`Recipient balance in base units: ${recipientInfo.amount.toString()}`);
+  console.log(
+    `Recipient balance: ${formatTokenAmount(recipientInfo.amount, mintInfo.decimals)} tokens (${recipientInfo.amount.toString()} base units).`,
+  );
 }
 
 main().catch((error: unknown) => {

@@ -13,6 +13,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import {
   addressExplorerLink,
   checkDevnetAndBalance,
+  formatTokenAmount,
   getConnection,
   getRecipientPublicKey,
   loadWallet,
@@ -267,9 +268,11 @@ async function main(): Promise<void> {
     withRpcRetry(() => getAccount(connection, sourceTokenAccount)),
     withRpcRetry(() => getAccount(connection, destinationAccount.address)),
   ]);
-  console.log(`My balance in base units: ${sourceInfo.amount.toString()}`);
   console.log(
-    `Recipient balance in base units: ${destinationInfo.amount.toString()}`,
+    `My balance: ${formatTokenAmount(sourceInfo.amount, mintInfo.decimals)} tokens (${sourceInfo.amount.toString()} base units).`,
+  );
+  console.log(
+    `Recipient balance: ${formatTokenAmount(destinationInfo.amount, mintInfo.decimals)} tokens (${destinationInfo.amount.toString()} base units).`,
   );
 
   mkdirSync("results", { recursive: true });

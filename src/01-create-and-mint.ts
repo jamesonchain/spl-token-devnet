@@ -21,6 +21,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import {
   addressExplorerLink,
   checkDevnetAndBalance,
+  formatTokenAmount,
   getConnection,
   loadWallet,
   transactionExplorerLink,
@@ -188,9 +189,11 @@ async function main(): Promise<void> {
     withRpcRetry(() => getMint(connection, createdMint)),
     withRpcRetry(() => getAccount(connection, associatedTokenAccount.address)),
   ]);
-  console.log(`Mint supply in base units: ${mintInfo.supply.toString()}`);
   console.log(
-    `My token balance: ${tokenAccountInfo.amount.toString()} base units`,
+    `Mint supply: ${formatTokenAmount(mintInfo.supply, mintInfo.decimals)} tokens (${mintInfo.supply.toString()} base units).`,
+  );
+  console.log(
+    `My token balance: ${formatTokenAmount(tokenAccountInfo.amount, mintInfo.decimals)} tokens (${tokenAccountInfo.amount.toString()} base units).`,
   );
 
   mkdirSync("results", { recursive: true });
