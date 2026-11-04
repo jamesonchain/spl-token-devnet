@@ -3,3 +3,6 @@ node_modules
 keys/
 *.keypair.json
 id.json
+devnet-wallet.json
+wallet.json
+results/

@@ -2,22 +2,27 @@
   "name": "spl-token-devnet",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "mint": "tsx src/01-create-and-mint.ts",
-    "transfer": "tsx src/02-transfer.ts",
-    "check": "tsx src/03-check.ts",
-    "metadata": "tsx src/04-name-token.ts",
-    "typecheck": "tsc --noEmit"
+    "spl:metadata-upload": "npx ts-node src/spl/spl_upload_metadata.ts",
+    "spl:init": "npx ts-node src/spl/spl_init.ts",
+    "spl:metadata": "npx ts-node src/spl/spl_metadata.ts",
+    "spl:mint": "npx ts-node src/spl/spl_mint.ts",
+    "spl:transfer": "npx ts-node src/spl/spl_transfer.ts"
   },
   "dependencies": {
-    "@solana/spl-token": "^0.4.14",
-    "@solana/web3.js": "^1.98.4",
-    "dotenv": "^16.4.7"
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@metaplex-foundation/umi": "^1.6.0",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.6.0",
+    "@metaplex-foundation/umi-uploader-irys": "^1.6.0",
+    "@solana-program/system": "^0.16.0",
+    "@solana-program/token": "^0.18.0",
+    "@solana/kit": "^8.6.0",
+    "bs58": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
-    "tsx": "^4.19.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
 }
